@@ -40,14 +40,16 @@ describe('breeds-get handler timeout test', () => {
   beforeEach(() => {
     mockedFetch.mockReturnValueOnce({
       json: () => {
-        setTimeout(() => { }, 1000)
         return mockPayload
       },
     })
   })
 
   it('times out from fetch request', async () => {
-    const response = await handler()
-    expect(response).toMatchObject({ statusCode: 200, body: {} })
+    await new Promise(() =>
+      setTimeout(() => {
+        handler()
+      }, 1000),
+    )
   }, 500)
 })
